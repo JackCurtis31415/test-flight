@@ -1,8 +1,10 @@
+
 require_relative "../../lib/airplane"
 
 describe Airplane do
 
   let(:my_plane) {Airplane.new("cesna", 10, 150)}
+  let(:my_low_fuel_plane) {Airplane.new("cesna", 10, 150, 10)}
 
   describe 'airplane attribute checks' do
     it 'type cesna works correctly' do
@@ -32,6 +34,17 @@ describe Airplane do
       my_plane.start
       expect(my_plane.start).to eq("airplane already started")
     end
+
+    it 'plane is starting with low fuel' do
+      my_plane.fuel = 0
+      expect(my_plane.start).to eq("airplane has no fuel")
+    end
+    
+    it 'plane is starting with negative fuel' do
+      my_plane.fuel = -200
+      expect(my_plane.start).to eq("airplane has no fuel")
+    end
+
   end
 
   describe "#takeoff" do
@@ -42,6 +55,19 @@ describe Airplane do
     it 'attempt takeoff when plane is not yet started' do
       expect(my_plane.takeoff).to eq("airplane not started, please start")
     end
+
+    it 'plane is taking off with low fuel' do
+      my_low_fuel_plane.start
+      # puts "fuel:  #{my_low_fuel_plane.fuel}"
+      expect(my_low_fuel_plane.takeoff).to eq("airplane has no fuel")
+    end
+    
+    it 'plane is taking off with negative fuel' do
+      my_plane.start
+      my_plane.fuel = -200
+      expect(my_plane.takeoff).to eq("airplane has no fuel")
+    end
+
   end
 
   describe "#land" do
@@ -57,6 +83,19 @@ describe Airplane do
       my_plane.takeoff
       expect(my_plane.land).to eq("airplane landed")
     end
+
+    it 'plane is taking off with low fuel' do
+      my_low_fuel_plane.start
+      # puts "fuel:  #{my_low_fuel_plane.fuel}"
+      expect(my_low_fuel_plane.takeoff).to eq("airplane has no fuel")
+    end
+    
+    it 'plane is taking off with negative fuel' do
+      my_plane.start
+      my_plane.fuel = -200
+      expect(my_plane.takeoff).to eq("airplane has no fuel")
+    end
+
   end
 
 end
